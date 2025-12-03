@@ -27,7 +27,7 @@ To streamline the release process:
 
     ```bash
     # Syntax: gh release create <tag> --generate-notes
-    gh release create v0.0.3 --generate-notes
+gh release create v<new-version> --generate-notes
     ```
 
 ### What happens next?
