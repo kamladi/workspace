@@ -258,6 +258,7 @@ export class DocsService {
             const res = await docs.documents.get({
                 documentId: id,
                 fields: 'tabs', // Request tabs only (body is legacy and mutually exclusive with tabs in mask)
+                includeTabsContent: true,
             });
 
             const tabs = res.data.tabs || [];
@@ -381,6 +382,7 @@ export class DocsService {
             const res = await docs.documents.get({
                 documentId: id,
                 fields: 'tabs',
+                includeTabsContent: true,
             });
 
             const tabs = res.data.tabs || [];
@@ -414,7 +416,7 @@ export class DocsService {
                     insertText: {
                         location: { 
                             index: locationIndex,
-                            segmentId: tabId
+                            tabId: tabId // Use tabId for tab-specific insertion
                         },
                         text: processedText,
                     },
@@ -425,13 +427,13 @@ export class DocsService {
             if (formattingRequests.length > 0) {
                  const requestsWithTabId = formattingRequests.map(req => {
                     if (req.updateTextStyle?.range) {
-                        req.updateTextStyle.range.segmentId = tabId;
+                        req.updateTextStyle.range.tabId = tabId;
                     }
                     if (req.updateParagraphStyle?.range) {
-                        req.updateParagraphStyle.range.segmentId = tabId;
+                        req.updateParagraphStyle.range.tabId = tabId;
                     }
                     if (req.insertText?.location) {
-                        req.insertText.location.segmentId = tabId;
+                        req.insertText.location.tabId = tabId; // Use tabId for tab-specific insertion
                     }
                     return req;
                 });
@@ -478,6 +480,7 @@ export class DocsService {
             const docBefore = await docs.documents.get({
                 documentId: id,
                 fields: 'tabs',
+                includeTabsContent: true,
             });
 
             const tabs = docBefore.data.tabs || [];
@@ -515,7 +518,7 @@ export class DocsService {
                     requests.push({
                         deleteContentRange: {
                             range: {
-                                segmentId: tabId,
+                            tabId: tabId,
                                 startIndex: adjustedPosition - 1, 
                                 endIndex: adjustedPosition - 1 + findText.length 
                             }
@@ -526,7 +529,7 @@ export class DocsService {
                     requests.push({
                         insertText: {
                             location: {
-                                segmentId: tabId,
+                                tabId: tabId,
                                 index: adjustedPosition 
                             },
                             text: processedText
@@ -540,7 +543,7 @@ export class DocsService {
                                 updateTextStyle: {
                                     ...formatRequest.updateTextStyle,
                                     range: {
-                                        segmentId: tabId,
+                                        tabId: tabId,
                                         startIndex: (formatRequest.updateTextStyle.range?.startIndex || 0) + adjustedPosition - 1,
                                         endIndex: (formatRequest.updateTextStyle.range?.endIndex || 0) + adjustedPosition - 1
                                     }
@@ -584,7 +587,7 @@ export class DocsService {
                         requests.push({
                             deleteContentRange: {
                                 range: {
-                                    segmentId: currentTabId,
+                                    tabId: currentTabId,
                                     startIndex: adjustedPosition - 1, 
                                     endIndex: adjustedPosition - 1 + findText.length 
                                 }
@@ -594,7 +597,7 @@ export class DocsService {
                         requests.push({
                             insertText: {
                                 location: {
-                                    segmentId: currentTabId,
+                                    tabId: currentTabId,
                                     index: adjustedPosition 
                                 },
                                 text: processedText

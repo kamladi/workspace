@@ -450,6 +450,7 @@ describe('DocsService', () => {
             expect(mockDocsAPI.documents.get).toHaveBeenCalledWith({
                 documentId: 'test-doc-id',
                 fields: 'tabs',
+                includeTabsContent: true,
             });
             expect(mockDocsAPI.documents.batchUpdate).toHaveBeenCalledWith({
                 documentId: 'test-doc-id',
@@ -498,6 +499,7 @@ describe('DocsService', () => {
             expect(mockDocsAPI.documents.get).toHaveBeenCalledWith({
                 documentId: 'test-doc-id',
                 fields: 'tabs',
+                includeTabsContent: true,
             });
             expect(mockDocsAPI.documents.batchUpdate).toHaveBeenCalledWith({
                 documentId: 'test-doc-id',
@@ -506,7 +508,7 @@ describe('DocsService', () => {
                         insertText: {
                             location: {
                                 index: 9,
-                                segmentId: 'tab-1'
+                                tabId: 'tab-1'
                             },
                             text: ' Appended',
                         },
@@ -553,6 +555,7 @@ describe('DocsService', () => {
             expect(mockDocsAPI.documents.get).toHaveBeenCalledWith({
                 documentId: 'test-doc-id',
                 fields: 'tabs',
+                includeTabsContent: true,
             });
 
             expect(mockDocsAPI.documents.batchUpdate).toHaveBeenCalledWith({
@@ -562,7 +565,7 @@ describe('DocsService', () => {
                         expect.objectContaining({
                             deleteContentRange: {
                                 range: {
-                                    segmentId: undefined,
+                                    tabId: undefined,
                                     startIndex: 0,
                                     endIndex: 5
                                 }
@@ -571,7 +574,7 @@ describe('DocsService', () => {
                         expect.objectContaining({
                             insertText: {
                                 location: {
-                                    segmentId: undefined,
+                                    tabId: undefined,
                                     index: 1
                                 },
                                 text: 'Hi'
@@ -623,6 +626,7 @@ describe('DocsService', () => {
             expect(mockDocsAPI.documents.get).toHaveBeenCalledWith({
                 documentId: 'test-doc-id',
                 fields: 'tabs',
+                includeTabsContent: true,
             });
 
             expect(mockDocsAPI.documents.batchUpdate).toHaveBeenCalledWith({
@@ -633,7 +637,7 @@ describe('DocsService', () => {
                         expect.objectContaining({
                             deleteContentRange: {
                                 range: {
-                                    segmentId: undefined,
+                                    tabId: undefined,
                                     startIndex: 8,
                                     endIndex: 17
                                 }
@@ -642,7 +646,7 @@ describe('DocsService', () => {
                         expect.objectContaining({
                             insertText: {
                                 location: {
-                                    segmentId: undefined,
+                                    tabId: undefined,
                                     index: 9
                                 },
                                 text: 'bold text'
@@ -651,7 +655,7 @@ describe('DocsService', () => {
                         expect.objectContaining({
                             updateTextStyle: expect.objectContaining({
                                 range: {
-                                    segmentId: undefined,
+                                    tabId: undefined,
                                     startIndex: 8,
                                     endIndex: 17
                                 },
@@ -662,7 +666,7 @@ describe('DocsService', () => {
                         expect.objectContaining({
                             deleteContentRange: {
                                 range: {
-                                    segmentId: undefined,
+                                    tabId: undefined,
                                     startIndex: 22,
                                     endIndex: 31
                                 }
@@ -671,7 +675,7 @@ describe('DocsService', () => {
                         expect.objectContaining({
                             insertText: {
                                 location: {
-                                    segmentId: undefined,
+                                    tabId: undefined,
                                     index: 23
                                 },
                                 text: 'bold text'
@@ -680,7 +684,7 @@ describe('DocsService', () => {
                         expect.objectContaining({
                             updateTextStyle: expect.objectContaining({
                                 range: {
-                                    segmentId: undefined,
+                                    tabId: undefined,
                                     startIndex: 22,
                                     endIndex: 31
                                 },
@@ -768,7 +772,7 @@ describe('DocsService', () => {
                         expect.objectContaining({
                             deleteContentRange: {
                                 range: {
-                                    segmentId: 'tab-1',
+                                    tabId: 'tab-1',
                                     startIndex: 0,
                                     endIndex: 5
                                 }
@@ -777,7 +781,7 @@ describe('DocsService', () => {
                         expect.objectContaining({
                             insertText: {
                                 location: {
-                                    segmentId: 'tab-1',
+                                    tabId: 'tab-1',
                                     index: 1
                                 },
                                 text: 'Hi'
