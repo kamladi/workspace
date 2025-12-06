@@ -62,8 +62,6 @@ npm run test && npm run lint
 
 This command will run ESLint, Prettier, all tests, and other checks as defined in the project's `package.json`.
 
-This command will run ESLint, Prettier, all tests, and other checks as defined in the project's `package.json`.
-
 > [!TIP]
 > After cloning create a git pre-commit hook file to ensure your commits are always clean.
 >
