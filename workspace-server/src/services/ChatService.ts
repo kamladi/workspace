@@ -176,11 +176,15 @@ export class ChatService {
         }
     }
 
-    public getMessages = async ({ spaceName, unreadOnly, pageSize, pageToken, orderBy }: { spaceName: string, unreadOnly?: boolean, pageSize?: number, pageToken?: string, orderBy?: string }) => {
+    public getMessages = async ({ spaceName, unreadOnly, pageSize, pageToken, orderBy, threadName }: { spaceName: string, unreadOnly?: boolean, pageSize?: number, pageToken?: string, orderBy?: string, threadName?: string }) => {
         logToFile(`Listing messages for space: ${spaceName}`);
         try {
             const chat = await this.getChatClient();
-            let filter: string | undefined;
+            const filters: string[] = [];
+
+            if (threadName) {
+                filters.push(`thread.name = "${threadName}"`);
+            }
 
             if (unreadOnly) {
                 const people = await this.getPeopleClient();
@@ -206,15 +210,17 @@ export class ChatService {
                 const lastReadTime = currentUserMember?.lastReadTime;
 
                 if (lastReadTime) {
-                    filter = `createTime > "${lastReadTime}"`;
+                    filters.push(`createTime > "${lastReadTime}"`);
                 } else {
                     logToFile(`No last read time found for user in space: ${spaceName}`);
                 }
             }
 
+            const filter = filters.join(' AND ');
+
             const res = await chat.spaces.messages.list({
                 parent: spaceName,
-                filter,
+                filter: filter ? filter : undefined,
                 pageSize,
                 pageToken,
                 orderBy,
