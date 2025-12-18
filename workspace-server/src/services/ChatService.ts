@@ -9,6 +9,15 @@ import { AuthManager } from '../auth/AuthManager';
 import { logToFile } from '../utils/logger';
 import { gaxiosOptions } from '../utils/GaxiosConfig';
 
+interface GetMessagesParams {
+  spaceName: string;
+  unreadOnly?: boolean;
+  pageSize?: number;
+  pageToken?: string;
+  orderBy?: string;
+  threadName?: string;
+}
+
 export class ChatService {
     constructor(private authManager: AuthManager) {
     }
@@ -176,7 +185,8 @@ export class ChatService {
         }
     }
 
-    public getMessages = async ({ spaceName, unreadOnly, pageSize, pageToken, orderBy, threadName }: { spaceName: string, unreadOnly?: boolean, pageSize?: number, pageToken?: string, orderBy?: string, threadName?: string }) => {
+    
+public getMessages = async ({ spaceName, unreadOnly, pageSize, pageToken, orderBy, threadName }: GetMessagesParams) => {
         logToFile(`Listing messages for space: ${spaceName}`);
         try {
             const chat = await this.getChatClient();
