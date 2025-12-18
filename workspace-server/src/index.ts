@@ -41,6 +41,7 @@ const SCOPES = [
     'https://www.googleapis.com/auth/chat.spaces',
     'https://www.googleapis.com/auth/chat.messages',
     'https://www.googleapis.com/auth/chat.memberships',
+    'https://www.googleapis.com/auth/chat.users.readstate',
     'https://www.googleapis.com/auth/userinfo.profile',
     'https://www.googleapis.com/auth/gmail.modify',
     'https://www.googleapis.com/auth/directory.readonly',
@@ -525,6 +526,29 @@ async function main() {
         }
       },
       chatService.setUpSpace
+    );
+
+    server.registerTool(
+        "chat.getSpaceReadState",
+        {
+            description: 'Gets the user\'s read state for a Google Chat space.',
+            inputSchema: {
+                spaceName: z.string().describe('The name of the space to get the read state for (e.g., spaces/AAAAN2J52O8).'),
+            }
+        },
+        chatService.getSpaceReadState
+    );
+
+    server.registerTool(
+        "chat.updateSpaceReadState",
+        {
+            description: 'Updates the user\'s read state for a Google Chat space.',
+            inputSchema: {
+                spaceName: z.string().describe('The name of the space to update the read state for (e.g., spaces/AAAAN2J52O8).'),
+                lastReadTime: z.string().describe('The time when the user last read the space, in strict ISO 8601 format with seconds and timezone.'),
+            }
+        },
+        chatService.updateSpaceReadState
     );
 
 

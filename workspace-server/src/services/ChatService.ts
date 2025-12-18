@@ -420,4 +420,80 @@ export class ChatService {
             };
         }
     }
+
+    public getSpaceReadState = async ({ spaceName }: { spaceName: string }) => {
+        logToFile(`Getting read state for space: ${spaceName}`);
+        try {
+            const chat = await this.getChatClient();
+            const resourceName = `users/me/${spaceName}/spaceReadState`;
+
+            const response = await chat.users.spaces.getSpaceReadState({
+                name: resourceName
+            });
+
+            logToFile(`Successfully retrieved read state for space: ${spaceName}`);
+            return {
+                content: [{
+                    type: "text" as const,
+                    text: JSON.stringify(response.data)
+                }]
+            };
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            logToFile(`Error during chat.getSpaceReadState: ${errorMessage}`);
+            if (error instanceof Error && error.stack) {
+                logToFile(`Stack trace: ${error.stack}`);
+            }
+            logToFile(`Full error object: ${JSON.stringify(error, null, 2)}`);
+            return {
+                content: [{
+                    type: "text" as const,
+                    text: JSON.stringify({
+                        error: 'An error occurred while retrieving space read state.',
+                        details: errorMessage
+                    })
+                }]
+            };
+        }
+    }
+
+    public updateSpaceReadState = async ({ spaceName, lastReadTime }: { spaceName: string, lastReadTime: string }) => {
+        logToFile(`Updating read state for space: ${spaceName}`);
+        try {
+            const chat = await this.getChatClient();
+            const resourceName = `users/me/${spaceName}/spaceReadState`;
+
+            const response = await chat.users.spaces.updateSpaceReadState({
+                name: resourceName,
+                updateMask: 'lastReadTime',
+                requestBody: {
+                    lastReadTime: lastReadTime
+                }
+            });
+
+            logToFile(`Successfully updated read state for space: ${spaceName}`);
+            return {
+                content: [{
+                    type: "text" as const,
+                    text: JSON.stringify(response.data)
+                }]
+            };
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            logToFile(`Error during chat.updateSpaceReadState: ${errorMessage}`);
+            if (error instanceof Error && error.stack) {
+                logToFile(`Stack trace: ${error.stack}`);
+            }
+            logToFile(`Full error object: ${JSON.stringify(error, null, 2)}`);
+            return {
+                content: [{
+                    type: "text" as const,
+                    text: JSON.stringify({
+                        error: 'An error occurred while updating space read state.',
+                        details: errorMessage
+                    })
+                }]
+            };
+        }
+    }
 }
